@@ -76,6 +76,7 @@ NUM_CASES=30
 
 # API Wrapper
 API_PORT=3000
+NOCODB_WRAPPER_API_KEY=your_secure_random_key_here
 ```
 
 ## 📊 Usage
@@ -134,57 +135,67 @@ Server runs at `http://localhost:3000`
 - `GET /api/contacts` - Contact information
 - `GET /api/employees` - Employee data
 - `GET /api/cases` - Cases with relationships
-- `GET /health` - Health check
-- `GET /` - API documentation
+- `GET /health` - Health check (no auth required)
+- `GET /` - API documentation (no auth required)
+
+### Authentication
+
+All `/api/*` endpoints require API key authentication via the `X-API-Key` header:
+
+```bash
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles"
+```
+
+The health check and documentation endpoints do not require authentication.
 
 ### Query Examples
 
 **Vehicles:**
 ```bash
 # All BMWs
-curl "http://localhost:3000/api/vehicles?Make=BMW"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Make=BMW"
 
 # BMW X5 models
-curl "http://localhost:3000/api/vehicles?Make=BMW&Model=X5"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Make=BMW&Model=X5"
 
 # Vehicles from 2020 or newer
-curl "http://localhost:3000/api/vehicles?Year_gte=2020"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Year_gte=2020"
 
 # Low mileage (under 50,000)
-curl "http://localhost:3000/api/vehicles?Mileage_lt=50000"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Mileage_lt=50000"
 
 # Automatic transmission
-curl "http://localhost:3000/api/vehicles?Transmission=Automatic"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Transmission=Automatic"
 ```
 
 **Contacts:**
 ```bash
 # VIP contacts only
-curl "http://localhost:3000/api/contacts?VIP=Yes"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/contacts?VIP=Yes"
 
 # California contacts
-curl "http://localhost:3000/api/contacts?State=California"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/contacts?State=California"
 
 # Search by name
-curl "http://localhost:3000/api/contacts?Name_like=John"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/contacts?Name_like=John"
 ```
 
 **Employees:**
 ```bash
 # Managers only
-curl "http://localhost:3000/api/employees?JobTitle=Manager"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/employees?JobTitle=Manager"
 
 # Extensions 5000+
-curl "http://localhost:3000/api/employees?Extension_gte=5000"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/employees?Extension_gte=5000"
 ```
 
 **Cases:**
 ```bash
 # All cases (includes linked contact and employee data)
-curl "http://localhost:3000/api/cases"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/cases"
 
 # Specific case number
-curl "http://localhost:3000/api/cases?CaseNumber=52236"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/cases?CaseNumber=52236"
 ```
 
 ### Query Operators
@@ -202,13 +213,13 @@ curl "http://localhost:3000/api/cases?CaseNumber=52236"
 
 ```bash
 # Pagination
-curl "http://localhost:3000/api/vehicles?limit=10&offset=0"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?limit=10&offset=0"
 
 # Sort ascending
-curl "http://localhost:3000/api/vehicles?sort=Year"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=Year"
 
 # Sort descending (use - prefix)
-curl "http://localhost:3000/api/vehicles?sort=-Year"
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=-Year"
 ```
 
 ## 🐳 Docker Deployment (Unraid)

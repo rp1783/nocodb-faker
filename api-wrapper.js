@@ -13,9 +13,39 @@ const VEHICLES_TABLE_ID = process.env.VEHICLES_TABLE_ID;
 const CONTACTS_TABLE_ID = process.env.TABLE_ID;
 const EMPLOYEES_TABLE_ID = process.env.EMPLOYEES_TABLE_ID;
 const CASES_TABLE_ID = process.env.CASES_TABLE_ID;
+const API_KEY = process.env.NOCODB_WRAPPER_API_KEY;
 
 // Middleware
 app.use(express.json());
+
+// API Key authentication middleware
+function authenticateAPIKey(req, res, next) {
+  // Skip auth for health and documentation endpoints
+  if (req.path === '/health' || req.path === '/') {
+    return next();
+  }
+
+  const providedKey = req.headers['x-api-key'];
+
+  if (!providedKey) {
+    return res.status(401).json({
+      success: false,
+      error: 'API key required. Please provide X-API-Key header.'
+    });
+  }
+
+  if (providedKey !== API_KEY) {
+    return res.status(403).json({
+      success: false,
+      error: 'Invalid API key.'
+    });
+  }
+
+  next();
+}
+
+// Apply authentication to all routes
+app.use(authenticateAPIKey);
 
 // Helper function to build NoCoDB where clause
 function buildWhereClause(params) {
