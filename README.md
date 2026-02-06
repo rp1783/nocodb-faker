@@ -10,6 +10,20 @@ A comprehensive toolkit for generating realistic fake data and providing a clean
 - **4 Pre-configured Tables**: Contacts, Employees, Vehicles, Cases
 - **Automatic Column Creation** with proper data types and relationships
 - **API Wrapper** that simplifies NoCoDB's query interface
+- **Oracle Cloud Ready** with one-command deployment including SSL/HTTPS
+- **Nginx Proxy Manager** for easy reverse proxy management
+
+## ☁️ Quick Deploy to Oracle Cloud
+
+Deploy NoCoDB with SSL/HTTPS in minutes:
+
+```bash
+git clone https://github.com/rp1783/nocodb-faker.git
+cd nocodb-faker
+./deploy-oracle.sh
+```
+
+See **[QUICK_START.md](QUICK_START.md)** for quick reference or **[ORACLE_DEPLOYMENT.md](ORACLE_DEPLOYMENT.md)** for detailed instructions.
 
 ## 📋 Tables & Data
 
@@ -43,7 +57,7 @@ A comprehensive toolkit for generating realistic fake data and providing a clean
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/nocodb-faker.git
+git clone https://github.com/rp1783/nocodb-faker.git
 cd nocodb-faker
 ```
 
@@ -115,7 +129,6 @@ node fix-display-values-v2.js    # Fix display values to show names
 node delete-empty-rows.js        # Clean up empty rows
 node delete-all-vehicles.js      # Remove all vehicles
 node add-year-column.js          # Add Year column to vehicles
-node debug-display-value.js      # Check display value settings
 ```
 
 ## 🌐 API Wrapper
@@ -222,64 +235,30 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=-Year"
 ```
 
-## 🐳 Docker Deployment (Unraid)
+## 🐳 Docker Deployment
 
-### Option 1: Docker Compose
+### Oracle Cloud (Recommended)
 
-Create `docker-compose.yml`:
-```yaml
-version: '3.8'
-services:
-  nocodb-api:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - NOCODB_URL=http://nocodb:8091
-      - NOCODB_API_TOKEN=${NOCODB_API_TOKEN}
-      - TABLE_ID=${TABLE_ID}
-      - EMPLOYEES_TABLE_ID=${EMPLOYEES_TABLE_ID}
-      - VEHICLES_TABLE_ID=${VEHICLES_TABLE_ID}
-      - CASES_TABLE_ID=${CASES_TABLE_ID}
-    restart: unless-stopped
+Complete deployment with NoCoDB, PostgreSQL, API wrapper, and Nginx Proxy Manager:
+
+```bash
+./deploy-oracle.sh
 ```
 
-### Option 2: Dockerfile
+See [ORACLE_DEPLOYMENT.md](ORACLE_DEPLOYMENT.md) for full documentation.
 
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["npm", "run", "api"]
+### Local Development
+
+Run the API wrapper only (requires existing NoCoDB instance):
+
+```bash
+docker-compose up -d
 ```
 
-## 🔒 Reverse Proxy Setup
+Or use the full Oracle setup locally:
 
-### Nginx Proxy Manager
-
-```nginx
-server {
-    listen 80;
-    server_name nocodb-api.yourdomain.com;
-
-    location / {
-        proxy_pass http://10.0.0.39:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
-
-### Traefik
-
-```yaml
-labels:
-  - "traefik.enable=true"
-  - "traefik.http.routers.nocodb-api.rule=Host(`nocodb-api.yourdomain.com`)"
-  - "traefik.http.services.nocodb-api.loadbalancer.server.port=3000"
+```bash
+docker-compose -f docker-compose.oracle.yml up -d
 ```
 
 ## 📝 Response Format
