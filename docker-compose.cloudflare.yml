@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  nocodb:
+    image: nocodb/nocodb:latest
+    container_name: nocodb
+    ports:
+      - "8091:8080"
+    volumes:
+      - ./noco.db:/usr/app/data/noco.db
+      - nocodb_data:/usr/app/data
+    environment:
+      - NC_AUTH_JWT_SECRET=${NC_AUTH_JWT_SECRET}
+    restart: unless-stopped
+    networks:
+      - nocodb-network
+
+  nocodb-api:
+    build: .
+    container_name: nocodb-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NOCODB_URL=http://nocodb:8080
+      - NOCODB_API_TOKEN=${NOCODB_API_TOKEN}
+      - TABLE_ID=${TABLE_ID}
+      - EMPLOYEES_TABLE_ID=${EMPLOYEES_TABLE_ID}
+      - VEHICLES_TABLE_ID=${VEHICLES_TABLE_ID}
+      - CASES_TABLE_ID=${CASES_TABLE_ID}
+      - API_PORT=3000
+      - NOCODB_WRAPPER_API_KEY=${NOCODB_WRAPPER_API_KEY}
+    depends_on:
+      - nocodb
+    restart: unless-stopped
+    networks:
+      - nocodb-network
+
+volumes:
+  nocodb_data:
+
+networks:
+  nocodb-network:
+    driver: bridge
