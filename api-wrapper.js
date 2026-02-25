@@ -269,20 +269,10 @@ app.get('/api/status', async (req, res) => {
   }
 });
 
-// Update status
+// Toggle status
 app.put('/api/status', async (req, res) => {
   try {
-    const { status } = req.body;
-
-    // Validate status value
-    if (status !== 0 && status !== 1) {
-      return res.status(400).json({
-        success: false,
-        error: 'Status must be 0 (Away) or 1 (Present)'
-      });
-    }
-
-    // Get the existing status record ID
+    // Get the current status
     const getResponse = await axios.get(
       `${NOCODB_URL}/api/v2/tables/${STATUS_TABLE_ID}/records`,
       {
@@ -300,12 +290,16 @@ app.put('/api/status', async (req, res) => {
       });
     }
 
+    // Toggle the status (0 -> 1, 1 -> 0)
+    const currentStatus = statusRecord.Status;
+    const newStatus = currentStatus === 1 ? 0 : 1;
+
     // Update the status
     await axios.patch(
       `${NOCODB_URL}/api/v2/tables/${STATUS_TABLE_ID}/records`,
       {
         Id: statusRecord.Id,
-        Status: status
+        Status: newStatus
       },
       {
         headers: {
@@ -318,9 +312,11 @@ app.put('/api/status', async (req, res) => {
     res.json({
       success: true,
       data: {
-        status: status,
-        statusText: status === 1 ? 'Present' : 'Away',
-        message: `Status updated to ${status === 1 ? 'Present' : 'Away'}`
+        status: newStatus,
+        statusText: newStatus === 1 ? 'Present' : 'Away',
+        previousStatus: currentStatus,
+        previousStatusText: currentStatus === 1 ? 'Present' : 'Away',
+        message: `Status toggled from ${currentStatus === 1 ? 'Present' : 'Away'} to ${newStatus === 1 ? 'Present' : 'Away'}`
       }
     });
   } catch (error) {
