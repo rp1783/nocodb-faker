@@ -13,6 +13,7 @@ const VEHICLES_TABLE_ID = process.env.VEHICLES_TABLE_ID;
 const CONTACTS_TABLE_ID = process.env.TABLE_ID;
 const EMPLOYEES_TABLE_ID = process.env.EMPLOYEES_TABLE_ID;
 const CASES_TABLE_ID = process.env.CASES_TABLE_ID;
+const STATUS_TABLE_ID = process.env.STATUS_TABLE_ID;
 const API_KEY = process.env.NOCODB_WRAPPER_API_KEY;
 
 // Middleware
@@ -231,6 +232,105 @@ app.get('/api/cases', async (req, res) => {
   }
 });
 
+// Status endpoints (Present/Away)
+// Get current status
+app.get('/api/status', async (req, res) => {
+  try {
+    const response = await axios.get(
+      `${NOCODB_URL}/api/v2/tables/${STATUS_TABLE_ID}/records`,
+      {
+        headers: { 'xc-token': API_TOKEN },
+        params: { limit: 1 }
+      }
+    );
+
+    const statusRecord = response.data.list?.[0];
+
+    if (!statusRecord) {
+      return res.status(404).json({
+        success: false,
+        error: 'Status not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        status: statusRecord.Status,
+        statusText: statusRecord.Status === 1 ? 'Present' : 'Away',
+        lastUpdated: statusRecord.UpdatedAt
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
+  }
+});
+
+// Update status
+app.put('/api/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    // Validate status value
+    if (status !== 0 && status !== 1) {
+      return res.status(400).json({
+        success: false,
+        error: 'Status must be 0 (Away) or 1 (Present)'
+      });
+    }
+
+    // Get the existing status record ID
+    const getResponse = await axios.get(
+      `${NOCODB_URL}/api/v2/tables/${STATUS_TABLE_ID}/records`,
+      {
+        headers: { 'xc-token': API_TOKEN },
+        params: { limit: 1 }
+      }
+    );
+
+    const statusRecord = getResponse.data.list?.[0];
+
+    if (!statusRecord) {
+      return res.status(404).json({
+        success: false,
+        error: 'Status record not found'
+      });
+    }
+
+    // Update the status
+    await axios.patch(
+      `${NOCODB_URL}/api/v2/tables/${STATUS_TABLE_ID}/records`,
+      {
+        Id: statusRecord.Id,
+        Status: status
+      },
+      {
+        headers: {
+          'xc-token': API_TOKEN,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    res.json({
+      success: true,
+      data: {
+        status: status,
+        statusText: status === 1 ? 'Present' : 'Away',
+        message: `Status updated to ${status === 1 ? 'Present' : 'Away'}`
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
+  }
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -244,7 +344,9 @@ app.get('/', (req, res) => {
       vehicles: 'GET /api/vehicles',
       contacts: 'GET /api/contacts',
       employees: 'GET /api/employees',
-      cases: 'GET /api/cases'
+      cases: 'GET /api/cases',
+      status: 'GET /api/status',
+      updateStatus: 'PUT /api/status'
     },
     examples: {
       'All BMWs': '/api/vehicles?Make=BMW',
