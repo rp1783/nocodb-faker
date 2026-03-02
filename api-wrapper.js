@@ -14,6 +14,7 @@ const CONTACTS_TABLE_ID = process.env.TABLE_ID;
 const EMPLOYEES_TABLE_ID = process.env.EMPLOYEES_TABLE_ID;
 const CASES_TABLE_ID = process.env.CASES_TABLE_ID;
 const STATUS_TABLE_ID = process.env.STATUS_TABLE_ID;
+const ZIPCODES_TABLE_ID = process.env.ZIPCODES_TABLE_ID;
 const API_KEY = process.env.NOCODB_WRAPPER_API_KEY;
 
 // Middleware
@@ -232,6 +233,44 @@ app.get('/api/cases', async (req, res) => {
   }
 });
 
+// ZipCodes endpoints
+app.get('/api/zipcodes', async (req, res) => {
+  try {
+    const whereClause = buildWhereClause(req.query);
+    const params = {
+      limit: req.query.limit || 100,
+      offset: req.query.offset || 0,
+    };
+
+    if (whereClause) {
+      params.where = whereClause;
+    }
+
+    if (req.query.sort) {
+      params.sort = req.query.sort;
+    }
+
+    const response = await axios.get(
+      `${NOCODB_URL}/api/v2/tables/${ZIPCODES_TABLE_ID}/records`,
+      {
+        headers: { 'xc-token': API_TOKEN },
+        params
+      }
+    );
+
+    res.json({
+      success: true,
+      count: response.data.list?.length || 0,
+      data: response.data.list || []
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
+  }
+});
+
 // Status endpoints (Present/Away)
 // Get current status
 app.get('/api/status', async (req, res) => {
@@ -341,6 +380,7 @@ app.get('/', (req, res) => {
       contacts: 'GET /api/contacts',
       employees: 'GET /api/employees',
       cases: 'GET /api/cases',
+      zipcodes: 'GET /api/zipcodes',
       status: 'GET /api/status',
       updateStatus: 'PUT /api/status'
     },
@@ -355,6 +395,9 @@ app.get('/', (req, res) => {
       'Search by name': '/api/contacts?Name_like=John',
       'All cases': '/api/cases',
       'Case by number': '/api/cases?CaseNumber=52236',
+      'Zip code lookup': '/api/zipcodes?Zip=90210',
+      'City search': '/api/zipcodes?City=Los Angeles&StateId=CA',
+      'State zips': '/api/zipcodes?StateId=CA&limit=50',
       'Sort by year': '/api/vehicles?sort=-Year',
       'Pagination': '/api/vehicles?limit=10&offset=0'
     },
@@ -377,5 +420,6 @@ app.listen(PORT, () => {
   console.log(`  http://localhost:${PORT}/api/contacts?VIP=Yes`);
   console.log(`  http://localhost:${PORT}/api/employees?JobTitle=Manager`);
   console.log(`  http://localhost:${PORT}/api/cases?CaseNumber=52236`);
+  console.log(`  http://localhost:${PORT}/api/zipcodes?Zip=90210`);
   console.log(`\nVisit http://localhost:${PORT}/ for full documentation\n`);
 });
