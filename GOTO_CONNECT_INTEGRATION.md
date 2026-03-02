@@ -57,14 +57,14 @@ When adding an HTTP Request node to your dial plan:
 
 All API requests require an `X-API-Key` header.
 
-**Your API Key:** `8f36298ff009ca297341b688a60d23e9b226526badef8352796c4af6efd4093a`
+**Your API Key:** `your_api_key_here`
 
 ### Setting Up Headers in GoTo Connect
 
 In the HTTP Request node configuration:
 ```
 Header Name: X-API-Key
-Header Value: 8f36298ff009ca297341b688a60d23e9b226526badef8352796c4af6efd4093a
+Header Value: your_api_key_here
 ```
 
 ---
@@ -615,7 +615,7 @@ Use curl or your browser to verify the API works:
 
 ```bash
 # Test with API key
-curl -H "X-API-Key: 8f36298ff009ca297341b688a60d23e9b226526badef8352796c4af6efd4093a" \
+curl -H "X-API-Key: YOUR_API_KEY_HERE" \
   "https://api.6569.io/api/contacts?PhoneNumber=+15551234567"
 ```
 
