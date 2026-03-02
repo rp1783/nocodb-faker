@@ -23,3 +23,6 @@ Thumbs.db
 *.tmp
 .temp/
 nocodb-backup/
+
+# Private documentation
+GOTO_CONNECT_INTEGRATION.md
