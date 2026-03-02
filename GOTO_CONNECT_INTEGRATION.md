@@ -22,7 +22,7 @@ GoTo Connect's **HTTP Request** node allows your dial plan to:
 - Store retrieved data in variables for use later in the dial plan
 - Make routing decisions based on real-time data
 
-**Your API Base URL:** `http://161.153.8.91:3000` (or your Cloudflare domain)
+**Your API Base URL:** `https://api.6569.io` 
 
 **Available Endpoints:**
 - `/api/contacts` - Customer contact information
@@ -77,7 +77,7 @@ Header Value: 8f36298ff009ca297341b688a60d23e9b226526badef8352796c4af6efd4093a
 
 **API Endpoint:**
 ```
-http://161.153.8.91:3000/api/contacts?PhoneNumber={{caller_id}}
+https://api.6569.io/api/contacts?PhoneNumber={{caller_id}}
 ```
 
 **Response Example:**
@@ -123,7 +123,7 @@ http://161.153.8.91:3000/api/contacts?PhoneNumber={{caller_id}}
 2. **Capture Digits (DTMF)** → Store in variable `account_input`
 3. **HTTP Request** → Query API:
    ```
-   http://161.153.8.91:3000/api/contacts?AccountNumber={{account_input}}
+   https://api.6569.io/api/contacts?AccountNumber={{account_input}}
    ```
 4. **Store Response:**
    - `account_balance` → `data[0].Balance`
@@ -141,7 +141,7 @@ http://161.153.8.91:3000/api/contacts?PhoneNumber={{caller_id}}
 
 **API Endpoint:**
 ```
-http://161.153.8.91:3000/api/cases?CaseNumber={{case_number_input}}
+https://api.6569.io/api/cases?CaseNumber={{case_number_input}}
 ```
 
 **Response Example:**
@@ -176,12 +176,12 @@ http://161.153.8.91:3000/api/cases?CaseNumber={{case_number_input}}
 
 **API Endpoint:**
 ```
-http://161.153.8.91:3000/api/zipcodes?Zip={{caller_zip}}
+https://api.6569.io/api/zipcodes?Zip={{caller_zip}}
 ```
 
 Or if you only have area code from caller ID:
 ```
-http://161.153.8.91:3000/api/zipcodes?StateId=CA&limit=1
+https://api.6569.io/api/zipcodes?StateId=CA&limit=1
 ```
 
 **Dial Plan Flow:**
@@ -201,12 +201,12 @@ http://161.153.8.91:3000/api/zipcodes?StateId=CA&limit=1
 
 **API Endpoint:**
 ```
-http://161.153.8.91:3000/api/employees?Extension={{dialed_digits}}
+https://api.6569.io/api/employees?Extension={{dialed_digits}}
 ```
 
 Or search by name:
 ```
-http://161.153.8.91:3000/api/employees?FullName_like={{search_term}}
+https://api.6569.io/api/employees?FullName_like={{search_term}}
 ```
 
 **Response Example:**
@@ -242,7 +242,7 @@ http://161.153.8.91:3000/api/employees?FullName_like={{search_term}}
 
 **API Endpoint:**
 ```
-http://161.153.8.91:3000/api/contacts?PhoneNumber={{caller_id}}
+https://api.6569.io/api/contacts?PhoneNumber={{caller_id}}
 ```
 
 **Dial Plan Flow:**
@@ -266,7 +266,7 @@ http://161.153.8.91:3000/api/contacts?PhoneNumber={{caller_id}}
 
 **API Endpoint:**
 ```
-http://161.153.8.91:3000/api/contacts?PhoneNumber={{caller_id}}
+https://api.6569.io/api/contacts?PhoneNumber={{caller_id}}
 ```
 
 **Dial Plan Flow:**
@@ -564,7 +564,7 @@ Conditional Routing:
 4. Variable mapping is incorrect
 
 **Solutions:**
-- Test the URL directly in a browser with `?` at the end: `http://161.153.8.91:3000/api/contacts?PhoneNumber=+15551234567`
+- Test the URL directly in a browser with `?` at the end: `https://api.6569.io/api/contacts?PhoneNumber=+15551234567`
 - Verify your X-API-Key header is set correctly
 - Check that GoTo Connect variable names match (e.g., `{{caller_id}}` vs `{{caller_number}}`)
 - Use browser dev tools or Postman to test API responses
@@ -577,7 +577,7 @@ Conditional Routing:
 3. Firewall blocking the request
 
 **Solutions:**
-- Verify API is accessible: `curl http://161.153.8.91:3000/health`
+- Verify API is accessible: `curl https://api.6569.io/health`
 - Check that Oracle Cloud instance is running
 - Ensure port 3000 is open in your firewall
 
@@ -616,7 +616,7 @@ Use curl or your browser to verify the API works:
 ```bash
 # Test with API key
 curl -H "X-API-Key: 8f36298ff009ca297341b688a60d23e9b226526badef8352796c4af6efd4093a" \
-  "http://161.153.8.91:3000/api/contacts?PhoneNumber=+15551234567"
+  "https://api.6569.io/api/contacts?PhoneNumber=+15551234567"
 ```
 
 ### Step 2: Create Simple Test Dial Plan
@@ -700,8 +700,8 @@ Always add fallback routes for error conditions.
 
 - **API Documentation**: See `API_GUIDE.md` in this repository
 - **NoCoDB Instance**: http://161.153.8.91:8091
-- **API Base URL**: http://161.153.8.91:3000
-- **API Health Check**: http://161.153.8.91:3000/health
+- **API Base URL**: https://api.6569.io
+- **API Health Check**: https://api.6569.io/health
 - **GoTo Connect Support**: https://support.goto.com/connect
 
 ---
