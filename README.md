@@ -13,7 +13,20 @@ A comprehensive toolkit for generating realistic fake data and providing a clean
 - **Oracle Cloud Ready** with one-command deployment including SSL/HTTPS
 - **Nginx Proxy Manager** for easy reverse proxy management
 
-## ☁️ Quick Deploy to Oracle Cloud
+## ☁️ Deploy to Oracle Cloud Free Tier
+
+### 🆕 Complete Beginner's Guide
+
+**New to cloud deployment?** Start here: **[BEGINNER_GUIDE.md](BEGINNER_GUIDE.md)**
+
+This comprehensive guide walks you through everything from creating an Oracle Cloud account to a fully deployed system with HTTPS. Includes:
+- Creating Oracle Cloud Free Tier account from scratch
+- VM instance setup step-by-step
+- Two deployment options: Nginx Proxy Manager OR Cloudflare Tunnel (no domain required!)
+- Complete troubleshooting section
+- Estimated time: 45-60 minutes for first-time setup
+
+### 🚀 Quick Deploy (For Experienced Users)
 
 Deploy NoCoDB with SSL/HTTPS in minutes:
 
