@@ -2,10 +2,10 @@
   "name": "nocodb-faker-contacts",
   "version": "1.0.0",
   "description": "Generate fake contact data and add to NoCoDB",
-  "main": "generate-contacts.js",
+  "main": "scripts/data-gen/generate-contacts.js",
   "type": "module",
   "scripts": {
-    "start": "node generate-contacts.js",
+    "start": "node scripts/data-gen/generate-contacts.js",
     "api": "node api-wrapper.js"
   },
   "dependencies": {
