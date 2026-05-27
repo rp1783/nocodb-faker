@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Deploy to Oracle VM
-        uses: appleboy/ssh-action@4a03da89e0a0a5d559486a9f7a8c2cc530cfe6b6  # v1.0.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.ORACLE_HOST }}
           username: ubuntu
