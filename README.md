@@ -182,12 +182,6 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Make=
 # BMW X5 models
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Make=BMW&Model=X5"
 
-# Vehicles from 2020 or newer
-curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Year_gte=2020"
-
-# Low mileage (under 50,000)
-curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Mileage_lt=50000"
-
 # Automatic transmission
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?Transmission=Automatic"
 ```
@@ -199,18 +193,12 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/contacts?VIP=Y
 
 # California contacts
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/contacts?State=California"
-
-# Search by name
-curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/contacts?Name_like=John"
 ```
 
 **Employees:**
 ```bash
 # Managers only
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/employees?JobTitle=Manager"
-
-# Extensions 5000+
-curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/employees?Extension_gte=5000"
 ```
 
 **Cases:**
@@ -221,17 +209,6 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/cases"
 # Specific case number
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/cases?CaseNumber=52236"
 ```
-
-### Query Operators
-
-| Operator | Parameter Format | Example |
-|----------|-----------------|---------|
-| Exact match | `field=value` | `Make=BMW` |
-| Greater than | `field_gt=value` | `Year_gt=2020` |
-| Less than | `field_lt=value` | `Mileage_lt=50000` |
-| Greater or equal | `field_gte=value` | `Year_gte=2020` |
-| Less or equal | `field_lte=value` | `Mileage_lte=100000` |
-| Contains | `field_like=value` | `Name_like=John` |
 
 ### Pagination & Sorting
 
