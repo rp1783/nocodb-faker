@@ -136,18 +136,36 @@ app.get('/api/contacts', async (req, res) => {
       params.sort = req.query.sort;
     }
 
-    const response = await axios.get(
-      `${NOCODB_URL}/api/v2/tables/${CONTACTS_TABLE_ID}/records`,
-      {
+    const [contactsResponse, casesResponse] = await Promise.all([
+      axios.get(`${NOCODB_URL}/api/v2/tables/${CONTACTS_TABLE_ID}/records`, {
         headers: { 'xc-token': API_TOKEN },
         params
+      }),
+      axios.get(`${NOCODB_URL}/api/v2/tables/${CASES_TABLE_ID}/records`, {
+        headers: { 'xc-token': API_TOKEN },
+        params: { limit: 1000 }
+      })
+    ]);
+
+    // Build a map of contactId -> [caseNumbers]
+    const casesByContact = {};
+    for (const c of (casesResponse.data.list || [])) {
+      for (const linked of (c.Contact || [])) {
+        const id = linked.Id ?? linked;
+        if (!casesByContact[id]) casesByContact[id] = [];
+        casesByContact[id].push(c.CaseNumber);
       }
-    );
+    }
+
+    const contacts = (contactsResponse.data.list || []).map(contact => ({
+      ...contact,
+      CaseNumbers: casesByContact[contact.Id] || []
+    }));
 
     res.json({
       success: true,
-      count: response.data.list?.length || 0,
-      data: response.data.list || []
+      count: contacts.length,
+      data: contacts
     });
   } catch (error) {
     res.status(500).json({
@@ -390,7 +408,7 @@ app.get('/', (req, res) => {
       'Vehicles from 2020+': '/api/vehicles?Year_gte=2020',
       'Low mileage (<50k)': '/api/vehicles?Mileage_lt=50000',
       'Automatic transmission': '/api/vehicles?Transmission=Automatic',
-      'VIP contacts': '/api/contacts?VIP=Yes',
+      'VIP contacts (includes CaseNumbers)': '/api/contacts?VIP=Yes',
       'Managers only': '/api/employees?JobTitle=Manager',
       'Search by name': '/api/contacts?Name_like=John',
       'All cases': '/api/cases',
