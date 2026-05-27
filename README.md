@@ -229,14 +229,14 @@ Pushing to `main` automatically deploys the `nocodb-api` container to the Oracle
 
 ### One-time setup
 
-Add these two secrets in **GitHub repo Settings → Secrets and variables → Actions**:
+1. Go to your GitHub repository → **Settings → Secrets and variables → Actions → New repository secret** and add:
 
-| Secret | Value |
-|--------|-------|
-| `ORACLE_HOST` | Oracle VM public IP address |
-| `ORACLE_SSH_KEY` | Contents of `~/.ssh/oracle.key` |
+| Secret | Where to get the value |
+|--------|----------------------|
+| `ORACLE_HOST` | Oracle Cloud Console → Instance details → Public IP address |
+| `ORACLE_SSH_KEY` | Run `cat ~/.ssh/oracle.key` and paste the full output including the `-----BEGIN...` and `-----END...` lines |
 
-The VM must have the repo cloned at `/home/ubuntu/nocodb-faker` and Docker installed.
+2. Ensure the repo is cloned at `/home/ubuntu/nocodb-faker` on the VM and Docker is installed (handled by the Oracle deployment scripts in `scripts/deploy/`).
 
 ## 🐳 Docker Deployment
 
