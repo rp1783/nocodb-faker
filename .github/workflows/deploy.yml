@@ -11,12 +11,14 @@ jobs:
 
     steps:
       - name: Deploy to Oracle VM
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@4a03da89e0a0a5d559486a9f7a8c2cc530cfe6b6  # v1.0.0
         with:
           host: ${{ secrets.ORACLE_HOST }}
           username: ubuntu
           key: ${{ secrets.ORACLE_SSH_KEY }}
+          timeout: 120s
           script: |
             cd /home/ubuntu/nocodb-faker
+            git reset --hard origin/main
             git pull
             docker compose up -d --build nocodb-api
