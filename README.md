@@ -17,7 +17,7 @@ A comprehensive toolkit for generating realistic fake data and providing a clean
 
 ### 🆕 Complete Beginner's Guide
 
-**New to cloud deployment?** Start here: **[BEGINNER_GUIDE.md](BEGINNER_GUIDE.md)**
+**New to cloud deployment?** Start here: **[BEGINNER_GUIDE.md](docs/BEGINNER_GUIDE.md)**
 
 This comprehensive guide walks you through everything from creating an Oracle Cloud account to a fully deployed system with HTTPS. Includes:
 - Creating Oracle Cloud Free Tier account from scratch
@@ -33,10 +33,10 @@ Deploy NoCoDB with SSL/HTTPS in minutes:
 ```bash
 git clone https://github.com/rp1783/nocodb-faker.git
 cd nocodb-faker
-./deploy-oracle.sh
+./scripts/deploy/deploy-oracle.sh
 ```
 
-See **[QUICK_START.md](QUICK_START.md)** for quick reference or **[ORACLE_DEPLOYMENT.md](ORACLE_DEPLOYMENT.md)** for detailed instructions.
+See **[QUICK_START.md](docs/QUICK_START.md)** for quick reference or **[ORACLE_DEPLOYMENT.md](docs/ORACLE_DEPLOYMENT.md)** for detailed instructions.
 
 ## 📋 Tables & Data
 
@@ -112,36 +112,34 @@ NOCODB_WRAPPER_API_KEY=your_secure_random_key_here
 
 **Contacts Table:**
 ```bash
-node create-columns.js          # Create columns
-node generate-contacts.js       # Generate 100 contacts
+node scripts/schema/create-columns.js          # Create columns
+node scripts/data-gen/generate-contacts.js     # Generate 100 contacts
 ```
 
 **Employees Table:**
 ```bash
-node create-employee-columns.js  # Create columns
-node generate-employees.js       # Generate 20 employees
+node scripts/schema/create-employee-columns.js  # Create columns
+node scripts/data-gen/generate-employees.js     # Generate 20 employees
 ```
 
 **Vehicles Table:**
 ```bash
-node create-vehicle-columns.js   # Create columns
-node fix-transmission-column.js  # Configure transmission options
-node generate-vehicles.js        # Generate 50 vehicles
+node scripts/schema/create-vehicle-columns.js   # Create columns
+node scripts/data-gen/generate-vehicles.js      # Generate 50 vehicles
 ```
 
 **Cases Table (Relational):**
 ```bash
-node create-case-columns.js      # Create columns with relationships
-node generate-cases.js           # Generate 30 cases
-node fix-display-values-v2.js    # Fix display values to show names
+node scripts/schema/create-case-columns.js      # Create columns with relationships
+node scripts/data-gen/generate-cases.js         # Generate 30 cases
 ```
 
 ### Utility Scripts
 
 ```bash
-node delete-empty-rows.js        # Clean up empty rows
-node delete-all-vehicles.js      # Remove all vehicles
-node add-year-column.js          # Add Year column to vehicles
+node scripts/utils/delete-empty-rows.js        # Clean up empty rows
+node scripts/utils/delete-all-vehicles.js      # Remove all vehicles
+node scripts/schema/add-year-column.js         # Add Year column to vehicles
 ```
 
 ## 🌐 API Wrapper
@@ -255,10 +253,10 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=
 Complete deployment with NoCoDB, PostgreSQL, API wrapper, and Nginx Proxy Manager:
 
 ```bash
-./deploy-oracle.sh
+./scripts/deploy/deploy-oracle.sh
 ```
 
-See [ORACLE_DEPLOYMENT.md](ORACLE_DEPLOYMENT.md) for full documentation.
+See [ORACLE_DEPLOYMENT.md](docs/ORACLE_DEPLOYMENT.md) for full documentation.
 
 ### Local Development
 
