@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm install --production
 
 # Copy application files
-COPY *.js ./
+COPY api-wrapper.js ./
 COPY .env.example ./
 
 # Expose port
