@@ -223,6 +223,21 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/vehicles?sort=-Year"
 ```
 
+## 🔄 CI/CD
+
+Pushing to `main` automatically deploys the `nocodb-api` container to the Oracle VM via GitHub Actions.
+
+### One-time setup
+
+Add these two secrets in **GitHub repo Settings → Secrets and variables → Actions**:
+
+| Secret | Value |
+|--------|-------|
+| `ORACLE_HOST` | Oracle VM public IP address |
+| `ORACLE_SSH_KEY` | Contents of `~/.ssh/oracle.key` |
+
+The VM must have the repo cloned at `/home/ubuntu/nocodb-faker` and Docker installed.
+
 ## 🐳 Docker Deployment
 
 ### Oracle Cloud (Recommended)
