@@ -22,7 +22,10 @@ services:
     restart: unless-stopped
     networks:
       - nocodb-network
+      - nocodb_nocodb-network
 
 networks:
   nocodb-network:
     driver: bridge
+  nocodb_nocodb-network:
+    external: true
