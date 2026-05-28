@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/oracle.key
+          chmod 600 ~/.ssh/oracle.key
+          ssh-keyscan -H ${{ secrets.ORACLE_HOST }} >> ~/.ssh/known_hosts
+
       - name: Deploy to Oracle VM
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.ORACLE_HOST }}
-          username: ubuntu
-          key: ${{ secrets.ORACLE_SSH_KEY }}
-          timeout: 120s
-          script: |
-            cd /home/ubuntu/nocodb-faker
-            git reset --hard origin/main
-            git pull
-            docker compose up -d --build nocodb-api
+        run: |
+          ssh -i ~/.ssh/oracle.key ubuntu@${{ secrets.ORACLE_HOST }} \
+            "cd /home/ubuntu/nocodb-faker && git reset --hard origin/main && git pull && docker compose up -d --build nocodb-api"
+        timeout-minutes: 5
