@@ -27,5 +27,8 @@ nocodb-backup/
 # Git worktrees
 .worktrees/
 
+# Subagent-driven-development workspace (may contain credentials in reports)
+.superpowers/
+
 # Private documentation
 GOTO_CONNECT_INTEGRATION.md
