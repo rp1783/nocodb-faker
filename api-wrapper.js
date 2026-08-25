@@ -15,6 +15,7 @@ const EMPLOYEES_TABLE_ID = process.env.EMPLOYEES_TABLE_ID;
 const CASES_TABLE_ID = process.env.CASES_TABLE_ID;
 const STATUS_TABLE_ID = process.env.STATUS_TABLE_ID;
 const ZIPCODES_TABLE_ID = process.env.ZIPCODES_TABLE_ID;
+const MEMBERS_TABLE_ID = process.env.MEMBERS_TABLE_ID;
 const API_KEY = process.env.NOCODB_WRAPPER_API_KEY;
 
 // Middleware
@@ -289,6 +290,44 @@ app.get('/api/zipcodes', async (req, res) => {
   }
 });
 
+// Members endpoints
+app.get('/api/members', async (req, res) => {
+  try {
+    const whereClause = buildWhereClause(req.query);
+    const params = {
+      limit: req.query.limit || 100,
+      offset: req.query.offset || 0,
+    };
+
+    if (whereClause) {
+      params.where = whereClause;
+    }
+
+    if (req.query.sort) {
+      params.sort = req.query.sort;
+    }
+
+    const response = await axios.get(
+      `${NOCODB_URL}/api/v2/tables/${MEMBERS_TABLE_ID}/records`,
+      {
+        headers: { 'xc-token': API_TOKEN },
+        params
+      }
+    );
+
+    res.json({
+      success: true,
+      count: response.data.list?.length || 0,
+      data: response.data.list || []
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
+  }
+});
+
 // Status endpoints (Present/Away)
 // Get current status
 app.get('/api/status', async (req, res) => {
@@ -397,6 +436,7 @@ app.get('/', (req, res) => {
       vehicles: 'GET /api/vehicles',
       contacts: 'GET /api/contacts',
       employees: 'GET /api/employees',
+      members: 'GET /api/members',
       cases: 'GET /api/cases',
       zipcodes: 'GET /api/zipcodes',
       status: 'GET /api/status',
@@ -410,6 +450,7 @@ app.get('/', (req, res) => {
       'Automatic transmission': '/api/vehicles?Transmission=Automatic',
       'VIP contacts (includes CaseNumbers)': '/api/contacts?VIP=Yes',
       'Managers only': '/api/employees?JobTitle=Manager',
+      'Member by ID': '/api/members?MemberID=HX123456789',
       'Search by name': '/api/contacts?Name_like=John',
       'All cases': '/api/cases',
       'Case by number': '/api/cases?CaseNumber=52236',
