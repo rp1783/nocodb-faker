@@ -32,6 +32,7 @@ curl -H "X-API-Key: your_api_key_here" "https://api.6569.io/api/contacts"
 | `GET /api/vehicles` | Vehicle inventory | Vehicle records with details |
 | `GET /api/employees` | Employee directory | Employee records with job titles |
 | `GET /api/cases` | Case management | Cases with linked contacts and employees |
+| `GET /api/members` | Insurance-style member records | Member records with MemberID |
 
 ## 🔍 Query Operators
 
@@ -235,6 +236,41 @@ curl -H "X-API-Key: your_api_key" "https://api.6569.io/api/employees?Name_like=S
 **Sort by name:**
 ```bash
 curl -H "X-API-Key: your_api_key" "https://api.6569.io/api/employees?sort=Name"
+```
+
+## 🪪 Members API
+
+### Endpoint
+```
+GET /api/members
+```
+
+### Fields
+- `Id` - Unique identifier
+- `MemberID` - Insurance-style member ID (`HX` + 9 digits, e.g. `HX123456789`)
+- `FirstName` - Member first name
+- `LastName` - Member last name
+
+### Examples
+
+**Get all members:**
+```bash
+curl -H "X-API-Key: your_api_key" "https://api.6569.io/api/members"
+```
+
+**Find member by ID:**
+```bash
+curl -H "X-API-Key: your_api_key" "https://api.6569.io/api/members?MemberID=HX123456789"
+```
+
+**Search by last name:**
+```bash
+curl -H "X-API-Key: your_api_key" "https://api.6569.io/api/members?LastName_like=Smith"
+```
+
+**Paginated results (10 per page):**
+```bash
+curl -H "X-API-Key: your_api_key" "https://api.6569.io/api/members?limit=10&offset=0"
 ```
 
 ## 📋 Cases API

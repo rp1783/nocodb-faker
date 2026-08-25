@@ -66,6 +66,11 @@ See **[QUICK_START.md](docs/QUICK_START.md)** for quick reference or **[ORACLE_D
 - Contact (linked to Contacts table)
 - AssignedTo (linked to Employees table)
 
+### 5. Members (50 records)
+- MemberID (insurance-style ID, format `HX` + 9 digits, e.g. `HX123456789`)
+- FirstName
+- LastName
+
 ## 🛠️ Installation
 
 1. **Clone the repository:**
@@ -100,6 +105,8 @@ NUM_CONTACTS=100
 NUM_EMPLOYEES=20
 NUM_VEHICLES=50
 NUM_CASES=30
+MEMBERS_TABLE_ID=your_members_table_id
+NUM_MEMBERS=50
 
 # API Wrapper
 API_PORT=3000
@@ -134,6 +141,12 @@ node scripts/schema/create-case-columns.js      # Create columns with relationsh
 node scripts/data-gen/generate-cases.js         # Generate 30 cases
 ```
 
+**Members Table:**
+```bash
+node scripts/schema/create-members-table.js    # Create table + columns
+node scripts/data-gen/generate-members.js      # Generate 50 members
+```
+
 ### Utility Scripts
 
 ```bash
@@ -159,6 +172,7 @@ Server runs at `http://localhost:3000`
 - `GET /api/contacts` - Contact information
 - `GET /api/employees` - Employee data
 - `GET /api/cases` - Cases with relationships
+- `GET /api/members` - Insurance-style member records
 - `GET /health` - Health check (no auth required)
 - `GET /` - API documentation (no auth required)
 
@@ -208,6 +222,15 @@ curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/cases"
 
 # Specific case number
 curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/cases?CaseNumber=52236"
+```
+
+**Members:**
+```bash
+# Find member by ID
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/members?MemberID=HX123456789"
+
+# Search by last name
+curl -H "X-API-Key: your_api_key_here" "http://localhost:3000/api/members?LastName_like=Smith"
 ```
 
 ### Pagination & Sorting
