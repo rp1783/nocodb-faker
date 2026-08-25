@@ -24,5 +24,8 @@ Thumbs.db
 .temp/
 nocodb-backup/
 
+# Git worktrees
+.worktrees/
+
 # Private documentation
 GOTO_CONNECT_INTEGRATION.md
